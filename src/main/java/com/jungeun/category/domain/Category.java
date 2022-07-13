@@ -38,4 +38,16 @@ public class Category {
 			.build();
 	}
 
+	public static Category makeSuper(String title) {
+		return Category.builder()
+			.title(title)
+			.build();
+	}
+
+	public static Category makeSub(String title, Long parentCategoryId) {
+		return Category.builder()
+			.title(title)
+			.parent(Category.of(parentCategoryId))
+			.build();
+	}
 }
