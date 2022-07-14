@@ -1,11 +1,15 @@
 package com.jungeun.category.controller;
 
+import com.jungeun.category.controller.dto.CategoryIdResponse;
 import com.jungeun.category.controller.dto.CategoryListResponse;
+import com.jungeun.category.controller.dto.CategorySaveRequest;
 import com.jungeun.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -15,8 +19,23 @@ public class CategoryController {
 	private final CategoryService categoryService;
 
 	@GetMapping("/category/{categoryId}")
-	public ResponseEntity<CategoryListResponse> selectSubByParent(@PathVariable final Long categoryId) {
+	public ResponseEntity<CategoryListResponse> selectSubByParent(
+		@PathVariable final Long categoryId) {
 		CategoryListResponse response = categoryService.selectSubByParent(categoryId);
+
+		return ResponseEntity.ok().body(response);
+	}
+
+	@PostMapping("/category")
+	public ResponseEntity<CategoryIdResponse> create(
+		@RequestBody CategorySaveRequest categorySaveRequest) {
+
+		CategoryIdResponse response = null;
+		if (categorySaveRequest.getParentCategoryId() == null) {
+			response = categoryService.createSuper(categorySaveRequest);
+		} else {
+			response = categoryService.createSub(categorySaveRequest);
+		}
 
 		return ResponseEntity.ok().body(response);
 	}
