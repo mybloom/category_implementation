@@ -1,5 +1,8 @@
 package com.jungeun.category.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +35,9 @@ public class Category {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_category_id")
 	private Category parent;
+
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
+	private List<Category> child = new ArrayList<>();
 
 	public void update(String title, Long parentCategoryId) {
 		this.title = title;
