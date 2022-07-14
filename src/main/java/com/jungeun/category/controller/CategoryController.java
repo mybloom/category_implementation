@@ -48,6 +48,13 @@ public class CategoryController {
 		return ResponseEntity.ok().body(response);
 	}
 
+	@PatchMapping("/category/{categoryId}")
+	public ResponseEntity<CategoryIdResponse> modify(
+		@PathVariable Long categoryId,
+		@RequestBody CategorySaveRequest categorySaveRequest) {
 
+		CategoryIdResponse response = categoryService.modify(categoryId, categorySaveRequest);
+		return ResponseEntity.ok().body(response);
+	}
 
 }
