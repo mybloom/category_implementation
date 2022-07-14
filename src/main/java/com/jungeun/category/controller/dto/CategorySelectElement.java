@@ -1,6 +1,7 @@
 package com.jungeun.category.controller.dto;
 
 import com.jungeun.category.domain.Category;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,9 @@ public class CategorySelectElement {
 		return CategorySelectElement.builder()
 			.categoryId(category.getId())
 			.title(category.getTitle())
-			.parentCategoryId(category.getParent().getId())
+			.parentCategoryId(Optional.ofNullable(category.getParent())
+				.orElse(Category.of(null))
+				.getId())
 			.build();
 	}
 }
