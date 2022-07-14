@@ -32,6 +32,11 @@ public class Category {
 	@JoinColumn(name = "parent_category_id")
 	private Category parent;
 
+	public void update(String title, Long parentCategoryId) {
+		this.title = title;
+		parent = Category.of(parentCategoryId);
+	}
+
 	public static Category of(Long categoryId) {
 		return Category.builder()
 			.id(categoryId)
