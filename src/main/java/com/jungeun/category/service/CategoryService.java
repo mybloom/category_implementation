@@ -40,4 +40,11 @@ public class CategoryService {
 			categorySaveRequest.getParentCategoryId()));
 		return CategoryIdResponse.of(category.getId());
 	}
+
+	public CategorySelectElement retrieveDetail(Long categoryId) {
+		Category category = categoryRepository.findById(categoryId)
+			.orElseThrow();
+
+		return CategorySelectElement.from(category);
+	}
 }
