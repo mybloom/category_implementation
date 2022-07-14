@@ -7,6 +7,7 @@ import com.jungeun.category.controller.dto.CategorySelectElement;
 import com.jungeun.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,4 +58,10 @@ public class CategoryController {
 		return ResponseEntity.ok().body(response);
 	}
 
+	@DeleteMapping("/category/{categoryId}")
+	public ResponseEntity<CategoryIdResponse> delete(@PathVariable Long categoryId) {
+		CategoryIdResponse response = categoryService.delete(categoryId);
+
+		return ResponseEntity.ok().body(response);
+	}
 }
