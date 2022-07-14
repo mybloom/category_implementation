@@ -47,4 +47,16 @@ public class CategoryService {
 
 		return CategorySelectElement.from(category);
 	}
+
+	@Transactional
+	public CategoryIdResponse modify(Long categoryId,
+		CategorySaveRequest categorySaveRequest) {
+
+		Category category = categoryRepository.findById(categoryId)
+			.orElseThrow();
+
+		category.update(categorySaveRequest.getTitle(), categorySaveRequest.getParentCategoryId());
+
+		return CategoryIdResponse.of(categoryId);
+	}
 }
