@@ -41,6 +41,7 @@ public class CategoryService {
 		return CategoryIdResponse.of(category.getId());
 	}
 
+	@Transactional(readOnly = true)
 	public CategorySelectElement retrieveDetail(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId)
 			.orElseThrow();
@@ -56,6 +57,13 @@ public class CategoryService {
 			.orElseThrow();
 
 		category.update(categorySaveRequest.getTitle(), categorySaveRequest.getParentCategoryId());
+
+		return CategoryIdResponse.of(categoryId);
+	}
+
+	@Transactional
+	public CategoryIdResponse delete(Long categoryId) {
+		categoryRepository.deleteById(categoryId);
 
 		return CategoryIdResponse.of(categoryId);
 	}
