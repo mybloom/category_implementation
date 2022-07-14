@@ -1,6 +1,8 @@
 package com.jungeun.category.service;
 
+import com.jungeun.category.controller.dto.CategoryIdResponse;
 import com.jungeun.category.controller.dto.CategoryListResponse;
+import com.jungeun.category.controller.dto.CategorySaveRequest;
 import com.jungeun.category.controller.dto.CategorySelectElement;
 import com.jungeun.category.domain.Category;
 import com.jungeun.category.domain.CategoryRepository;
@@ -23,5 +25,19 @@ public class CategoryService {
 		return new CategoryListResponse(subCategories.stream()
 			.map(CategorySelectElement::from)
 			.collect(Collectors.toList()));
+	}
+
+	@Transactional
+	public CategoryIdResponse createSuper(CategorySaveRequest categorySaveRequest) {
+		Category category = categoryRepository.save(
+			Category.makeSuper(categorySaveRequest.getTitle()));
+		return CategoryIdResponse.of(category.getId());
+	}
+
+	@Transactional
+	public CategoryIdResponse createSub(CategorySaveRequest categorySaveRequest) {
+		Category category = categoryRepository.save(Category.makeSub(categorySaveRequest.getTitle(),
+			categorySaveRequest.getParentCategoryId()));
+		return CategoryIdResponse.of(category.getId());
 	}
 }
