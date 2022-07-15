@@ -30,13 +30,11 @@ public class CategoryService {
 			response.add(CategorySelectElement.from(category));
 		}
 
-		CategoryListResponse categoryListResponse = new CategoryListResponse(
+		return new CategoryListResponse(
 			categories.get(0).getSuperCategoryId(),
 			categories.get(0).getSuperTitle(),
 			categories.get(0).getSuperParentCategoryId(),
 			response);
-
-		return categoryListResponse;
 	}
 
 	@Transactional
