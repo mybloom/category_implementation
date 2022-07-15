@@ -25,6 +25,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Category {
 
+	public static final int CATEGORY_DEPTH = 2;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "category_id")
@@ -37,11 +39,10 @@ public class Category {
 	private Category parent;
 
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
-	private List<Category> child = new ArrayList<>();
+	private List<Category> subCategories = new ArrayList<>();
 
-	public void update(String title, Long parentCategoryId) {
+	public void modify(String title) {
 		this.title = title;
-		parent = Category.of(parentCategoryId);
 	}
 
 	public static Category of(Long categoryId) {
