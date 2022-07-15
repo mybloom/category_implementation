@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class CategoryListResponse {
 
-	private final List<CategorySelectElement> data;
+	private final Long categoryId;
+	private final String title;
+	private final Long parentCategoryId;
+	private final List<CategorySelectElement> subCategories;
 
 }
