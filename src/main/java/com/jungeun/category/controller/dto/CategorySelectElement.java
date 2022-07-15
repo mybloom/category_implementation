@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Builder(access = AccessLevel.PRIVATE)
+@Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class CategorySelectElement {
