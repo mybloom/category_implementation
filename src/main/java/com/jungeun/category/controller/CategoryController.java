@@ -2,6 +2,7 @@ package com.jungeun.category.controller;
 
 import com.jungeun.category.controller.dto.CategoryIdResponse;
 import com.jungeun.category.controller.dto.CategoryListResponse;
+import com.jungeun.category.controller.dto.CategoryModifyRequest;
 import com.jungeun.category.controller.dto.CategorySaveRequest;
 import com.jungeun.category.controller.dto.CategorySelectElement;
 import com.jungeun.category.service.CategoryService;
@@ -52,9 +53,9 @@ public class CategoryController {
 	@PatchMapping("/category/{categoryId}")
 	public ResponseEntity<CategoryIdResponse> modify(
 		@PathVariable Long categoryId,
-		@RequestBody CategorySaveRequest categorySaveRequest) {
+		@RequestBody CategoryModifyRequest categoryModifyRequest) {
 
-		CategoryIdResponse response = categoryService.modify(categoryId, categorySaveRequest);
+		CategoryIdResponse response = categoryService.modify(categoryId, categoryModifyRequest);
 		return ResponseEntity.ok().body(response);
 	}
 
