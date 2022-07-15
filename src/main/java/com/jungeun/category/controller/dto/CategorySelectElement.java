@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class CategorySelectElement {
@@ -24,6 +24,14 @@ public class CategorySelectElement {
 			.parentCategoryId(Optional.ofNullable(category.getParent())
 				.orElse(Category.of(null))
 				.getId())
+			.build();
+	}
+
+	public static CategorySelectElement from(ICategoryJoin category) {
+		return CategorySelectElement.builder()
+			.categoryId(category.getCategoryId())
+			.title(category.getTitle())
+			.parentCategoryId(category.getParentCategoryId())
 			.build();
 	}
 }

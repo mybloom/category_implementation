@@ -27,11 +27,7 @@ public class CategoryService {
 
 		List<CategorySelectElement> response = new ArrayList<>();
 		for (ICategoryJoin category : categories) {
-			response.add(CategorySelectElement.builder()
-				.categoryId(category.getCategoryId())
-				.title(category.getTitle())
-				.parentCategoryId(category.getParentCategoryId())
-				.build());
+			response.add(CategorySelectElement.from(category));
 		}
 
 		CategoryListResponse categoryListResponse = new CategoryListResponse(
