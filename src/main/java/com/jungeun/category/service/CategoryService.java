@@ -5,11 +5,12 @@ import com.jungeun.category.controller.dto.CategoryListResponse;
 import com.jungeun.category.controller.dto.CategoryModifyRequest;
 import com.jungeun.category.controller.dto.CategorySaveRequest;
 import com.jungeun.category.controller.dto.CategorySelectElement;
+import com.jungeun.category.controller.dto.ICategoryJoin;
 import com.jungeun.category.domain.Category;
 import com.jungeun.category.domain.CategoryRepository;
 import com.jungeun.category.exception.CategoryDepthInvalidException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,24 @@ public class CategoryService {
 
 	@Transactional(readOnly = true)
 	public CategoryListResponse selectSubByParent(Long categoryId) {
-		List<Category> subCategories = categoryRepository.findByParent(Category.of(categoryId));
+		List<ICategoryJoin> categories = categoryRepository.findByParentCategoryId(categoryId);
 
-		return new CategoryListResponse(subCategories.stream()
-			.map(CategorySelectElement::from)
-			.collect(Collectors.toList()));
+		List<CategorySelectElement> response = new ArrayList<>();
+		for (ICategoryJoin category : categories) {
+			response.add(CategorySelectElement.builder()
+				.categoryId(category.getCategoryId())
+				.title(category.getTitle())
+				.parentCategoryId(category.getParentCategoryId())
+				.build());
+		}
+
+		CategoryListResponse categoryListResponse = new CategoryListResponse(
+			categories.get(0).getSuperCategoryId(),
+			categories.get(0).getSuperTitle(),
+			categories.get(0).getSuperParentCategoryId(),
+			response);
+
+		return categoryListResponse;
 	}
 
 	@Transactional
