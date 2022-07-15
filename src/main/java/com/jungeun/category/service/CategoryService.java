@@ -2,10 +2,12 @@ package com.jungeun.category.service;
 
 import com.jungeun.category.controller.dto.CategoryIdResponse;
 import com.jungeun.category.controller.dto.CategoryListResponse;
+import com.jungeun.category.controller.dto.CategoryModifyRequest;
 import com.jungeun.category.controller.dto.CategorySaveRequest;
 import com.jungeun.category.controller.dto.CategorySelectElement;
 import com.jungeun.category.domain.Category;
 import com.jungeun.category.domain.CategoryRepository;
+import com.jungeun.category.exception.CategoryDepthInvalidException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +38,21 @@ public class CategoryService {
 
 	@Transactional
 	public CategoryIdResponse createSub(CategorySaveRequest categorySaveRequest) {
+
+		validateCategoryDepth(categorySaveRequest);
+
 		Category category = categoryRepository.save(Category.makeSub(categorySaveRequest.getTitle(),
 			categorySaveRequest.getParentCategoryId()));
 		return CategoryIdResponse.of(category.getId());
+	}
+
+	private void validateCategoryDepth(CategorySaveRequest categorySaveRequest) {
+		Category parentCategory = categoryRepository.findById(
+				categorySaveRequest.getParentCategoryId())
+			.orElseThrow();
+		if (parentCategory.getParent() != null) {
+			throw new CategoryDepthInvalidException();
+		}
 	}
 
 	@Transactional(readOnly = true)
@@ -51,12 +65,12 @@ public class CategoryService {
 
 	@Transactional
 	public CategoryIdResponse modify(Long categoryId,
-		CategorySaveRequest categorySaveRequest) {
+		CategoryModifyRequest categoryModifyRequest) {
 
 		Category category = categoryRepository.findById(categoryId)
 			.orElseThrow();
 
-		category.update(categorySaveRequest.getTitle(), categorySaveRequest.getParentCategoryId());
+		category.modify(categoryModifyRequest.getTitle());
 
 		return CategoryIdResponse.of(categoryId);
 	}
