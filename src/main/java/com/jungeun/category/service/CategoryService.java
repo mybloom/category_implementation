@@ -89,4 +89,9 @@ public class CategoryService {
 
 		return CategoryIdResponse.of(categoryId);
 	}
+
+	public CategoryListResponse retrieveAllHierarchy() {
+
+		return null;
+	}
 }

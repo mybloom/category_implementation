@@ -22,6 +22,13 @@ public class CategoryController {
 
 	private final CategoryService categoryService;
 
+	@GetMapping("/category")
+	public ResponseEntity<CategoryListResponse> retrieveAllHierarchy() {
+		CategoryListResponse response = categoryService.retrieveAllHierarchy();
+
+		return ResponseEntity.ok().body(response);
+	}
+
 	@GetMapping("/category/{categoryId}")
 	public ResponseEntity<CategoryListResponse> retrieveSubByParent(
 		@PathVariable final Long categoryId) {
