@@ -2,5 +2,6 @@
 
 ## 카테고리 조회
 
-- [상위카테고리를 이용하여 하위카테고리 조회](apiSelectByParentId.md)
+- [전체 카테고리 조회](apiSelectAll.md)
+- [하위 카테고리 조회](apiSelectByParentId.md)
 
