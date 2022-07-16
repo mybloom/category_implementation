@@ -25,40 +25,39 @@
 
   None
 
-* **Success Response:**
-
-    * **Code:** 200 <br />
-      **Content:** `{ id : 12, name : "Michael Bloom" }`
-
 * **Error Response:**
-
+    * **Code:** 400 Bad Request <br />
+      **Content:** `{  "message": "상위카테고리만 조회가능합니다." }`
+  
     * **Code:** 404 NOT FOUND <br />
-      **Content:** `{ error : "User doesn't exist" }`
+      **Content:** `{ "message": "해당 categoryId는 존재하지 않은 카테고리입니다." }`
 
-* **Response Sample :**
+* **Success Response:**
+    * **Code:** 200 <br />
+    * **Response Sample :**
 
-  ```json
-    {
-        "categoryId": 1,
-        "title": "아우터",
-        "parentCategoryId": null,
-        "subCategories": [
-            {
-                "categoryId": 4,
-                "title": "쟈켓",
-                "parentCategoryId": 1
-            },
-            {
-                "categoryId": 5,
-                "title": "가디건",
-                "parentCategoryId": 1
+      ```json
+        {
+            "categoryId": 1,
+            "title": "아우터",
+            "parentCategoryId": null,
+            "subCategories": [
+                {
+                    "categoryId": 4,
+                    "title": "쟈켓",
+                    "parentCategoryId": 1
                 },
-            {
-                "categoryId": 6,
-                "title": "블루종",
-                "parentCategoryId": 1
-            }
-        ]
-    }
+                {
+                    "categoryId": 5,
+                    "title": "가디건",
+                    "parentCategoryId": 1
+                    },
+                {
+                    "categoryId": 6,
+                    "title": "블루종",
+                    "parentCategoryId": 1
+                }
+            ]
+        }
 
-  ```
+      ```
