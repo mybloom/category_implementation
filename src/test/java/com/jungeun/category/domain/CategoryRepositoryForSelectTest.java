@@ -17,7 +17,6 @@ class CategoryRepositoryForSelectTest {
 	CategoryRepository categoryRepository;
 
 	final Long SUPER_CATEGORY_ID = 1L;
-	final Long SUB_CATEGORY_ID = 2L;
 
 
 	@DisplayName("상위카테고리를 이용해 하위 모든 카테고리 조회")
