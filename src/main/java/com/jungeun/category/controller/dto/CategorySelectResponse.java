@@ -33,21 +33,4 @@ public class CategorySelectResponse {
 			.build();
 	}
 
-	public static CategorySelectResponse from(ICategoryJoin category) {
-		return CategorySelectResponse.builder()
-			.categoryId(category.getCategoryId())
-			.title(category.getTitle())
-			.parentCategoryId(category.getParentCategoryId())
-			.build();
-	}
-
-	public static CategorySelectResponse of(Long categoryId,
-		String title, Long parentCategoryId, List<CategorySelectResponse> subCategories) {
-		return CategorySelectResponse.builder()
-			.categoryId(categoryId)
-			.title(title)
-			.parentCategoryId(parentCategoryId)
-			.subCategories(subCategories)
-			.build();
-	}
 }
