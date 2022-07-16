@@ -1,11 +1,13 @@
 package com.jungeun.category.controller;
 
 import com.jungeun.category.controller.dto.CategoryIdResponse;
+import com.jungeun.category.controller.dto.CategoryListAllResponse;
 import com.jungeun.category.controller.dto.CategoryListResponse;
 import com.jungeun.category.controller.dto.CategoryModifyRequest;
 import com.jungeun.category.controller.dto.CategorySaveRequest;
 import com.jungeun.category.controller.dto.CategorySelectElement;
 import com.jungeun.category.service.CategoryService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,8 +25,8 @@ public class CategoryController {
 	private final CategoryService categoryService;
 
 	@GetMapping("/category")
-	public ResponseEntity<CategoryListResponse> retrieveAllHierarchy() {
-		CategoryListResponse response = categoryService.retrieveAllHierarchy();
+	public ResponseEntity<List<CategoryListAllResponse>> retrieveAllHierarchy() {
+		List<CategoryListAllResponse> response = categoryService.retrieveAllHierarchy();
 
 		return ResponseEntity.ok().body(response);
 	}
