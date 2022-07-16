@@ -65,7 +65,7 @@ public class CategoryService {
 	}
 
 	private void validateCategoryDepth(CategorySaveRequest categorySaveRequest) {
-		Category parentCategory = categoryRepository.findById(
+		Category parentCategory = categoryRepository.findByIdOrderByIdDesc(
 				categorySaveRequest.getParentCategoryId())
 			.orElseThrow();
 		if (parentCategory.getParent() != null) {
