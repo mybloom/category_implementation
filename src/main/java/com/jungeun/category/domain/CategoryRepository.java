@@ -22,4 +22,18 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 			+ "where s.parent.id = :parentCategoryId ")
 	List<ICategoryJoin> findByParentCategoryId(@Param("parentCategoryId") Long parentCategoryId);
 
+	@Query(
+		"select distinct "
+			+ "p.id as superCategoryId, "
+			+ "p.title as superTitle, "
+			+ "p.parent.id as superParentCategoryId, "
+			+ "s.id as categoryId, "
+			+ "s.title as title, "
+			+ "s.parent.id as parentCategoryId "
+			+ "from Category p "
+			+ "left join Category s "
+			+ "on p.id = s.parent.id "
+			+ "where p.parent is null")
+	List<ICategoryJoin> findAllHierarchy();
+
 }
