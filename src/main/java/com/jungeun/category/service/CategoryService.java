@@ -90,8 +90,8 @@ public class CategoryService {
 	public CategoryIdResponse modify(Long categoryId,
 		CategoryModifyRequest categoryModifyRequest) {
 
-		Category category = categoryRepository.findById(categoryId)
-			.orElseThrow();
+		Category category = categoryRepository.findByIdOrderByIdDesc(categoryId)
+			.orElseThrow(CategoryNoDataFoundException::new);
 
 		category.modify(categoryModifyRequest.getTitle());
 
