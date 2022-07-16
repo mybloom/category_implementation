@@ -3,11 +3,9 @@ package com.jungeun.category.service;
 import static java.util.stream.Collectors.groupingBy;
 
 import com.jungeun.category.controller.dto.CategoryIdResponse;
-import com.jungeun.category.controller.dto.CategoryListAllResponse;
-import com.jungeun.category.controller.dto.CategoryListResponse;
+import com.jungeun.category.controller.dto.CategorySelectResponse;
 import com.jungeun.category.controller.dto.CategoryModifyRequest;
 import com.jungeun.category.controller.dto.CategorySaveRequest;
-import com.jungeun.category.controller.dto.CategorySelectElement;
 import com.jungeun.category.controller.dto.ICategoryJoin;
 import com.jungeun.category.domain.Category;
 import com.jungeun.category.domain.CategoryRepository;
@@ -16,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,19 +26,19 @@ public class CategoryService {
 	private final CategoryRepository categoryRepository;
 
 	@Transactional(readOnly = true)
-	public CategoryListResponse selectSubByParent(Long categoryId) {
+	public CategorySelectResponse selectSubByParent(Long categoryId) {
 		List<ICategoryJoin> categories = categoryRepository.findByParentCategoryId(categoryId);
 
-		List<CategorySelectElement> response = new ArrayList<>();
+		List<CategorySelectResponse> subCategories = new ArrayList<>();
 		for (ICategoryJoin category : categories) {
-			response.add(CategorySelectElement.from(category));
+			subCategories.add(CategorySelectResponse.from(category));
 		}
 
-		return new CategoryListResponse(
+		return CategorySelectResponse.of(
 			categories.get(0).getSuperCategoryId(),
 			categories.get(0).getSuperTitle(),
 			categories.get(0).getSuperParentCategoryId(),
-			response);
+			subCategories);
 	}
 
 	@Transactional
@@ -69,11 +68,16 @@ public class CategoryService {
 	}
 
 	@Transactional(readOnly = true)
-	public CategorySelectElement retrieveDetail(Long categoryId) {
+	public CategorySelectResponse retrieveDetail(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId)
 			.orElseThrow();
 
-		return CategorySelectElement.from(category);
+		CategorySelectResponse response = CategorySelectResponse.from(category);
+		response.setSubCategories(category.getSubCategories().stream()
+			.map(CategorySelectResponse::from)
+			.collect(Collectors.toList()));
+
+		return response;
 	}
 
 	@Transactional
@@ -96,12 +100,12 @@ public class CategoryService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<CategoryListAllResponse> retrieveAllHierarchy() {
+	public List<CategorySelectResponse> retrieveAllHierarchy() {
 		List<Category> categories = categoryRepository.findAll();
 
-		Map<Long, List<CategoryListAllResponse>> categoryViaGroupingByParent
+		Map<Long, List<CategorySelectResponse>> categoryViaGroupingByParent
 			= categories.stream()
-			.map(CategoryListAllResponse::from)
+			.map(CategorySelectResponse::from)
 			.collect(groupingBy(
 				categoryListAllResponse -> Optional.ofNullable(
 						categoryListAllResponse.getParentCategoryId())
@@ -113,12 +117,12 @@ public class CategoryService {
 	}
 
 	private void addSubCategories(
-		Map<Long, List<CategoryListAllResponse>> categoryViaGroupingByParent) {
+		Map<Long, List<CategorySelectResponse>> categoryViaGroupingByParent) {
 
-		List<CategoryListAllResponse> categories = categoryViaGroupingByParent.get(
+		List<CategorySelectResponse> categories = categoryViaGroupingByParent.get(
 			Category.PARENT_CATEGORY_ID_OF_ROOT);
-		for (CategoryListAllResponse category : categories) {
-			List<CategoryListAllResponse> subCategories = categoryViaGroupingByParent.get(
+		for (CategorySelectResponse category : categories) {
+			List<CategorySelectResponse> subCategories = categoryViaGroupingByParent.get(
 				category.getCategoryId());
 			category.setSubCategories(subCategories);
 		}

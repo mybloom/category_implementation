@@ -1,11 +1,9 @@
 package com.jungeun.category.controller;
 
 import com.jungeun.category.controller.dto.CategoryIdResponse;
-import com.jungeun.category.controller.dto.CategoryListAllResponse;
-import com.jungeun.category.controller.dto.CategoryListResponse;
+import com.jungeun.category.controller.dto.CategorySelectResponse;
 import com.jungeun.category.controller.dto.CategoryModifyRequest;
 import com.jungeun.category.controller.dto.CategorySaveRequest;
-import com.jungeun.category.controller.dto.CategorySelectElement;
 import com.jungeun.category.service.CategoryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +23,16 @@ public class CategoryController {
 	private final CategoryService categoryService;
 
 	@GetMapping("/category")
-	public ResponseEntity<List<CategoryListAllResponse>> retrieveAllHierarchy() {
-		List<CategoryListAllResponse> response = categoryService.retrieveAllHierarchy();
+	public ResponseEntity<List<CategorySelectResponse>> retrieveAllHierarchy() {
+		List<CategorySelectResponse> response = categoryService.retrieveAllHierarchy();
 
 		return ResponseEntity.ok().body(response);
 	}
 
 	@GetMapping("/category/{categoryId}")
-	public ResponseEntity<CategoryListResponse> retrieveSubByParent(
+	public ResponseEntity<CategorySelectResponse> retrieveSubByParent(
 		@PathVariable final Long categoryId) {
-		CategoryListResponse response = categoryService.selectSubByParent(categoryId);
+		CategorySelectResponse response = categoryService.selectSubByParent(categoryId);
 
 		return ResponseEntity.ok().body(response);
 	}
@@ -54,8 +52,8 @@ public class CategoryController {
 	}
 
 	@GetMapping("/category/{categoryId}/detail")
-	public ResponseEntity<CategorySelectElement> retrieveDetail(@PathVariable Long categoryId) {
-		CategorySelectElement response = categoryService.retrieveDetail(categoryId);
+	public ResponseEntity<CategorySelectResponse> retrieveDetail(@PathVariable Long categoryId) {
+		CategorySelectResponse response = categoryService.retrieveDetail(categoryId);
 		return ResponseEntity.ok().body(response);
 	}
 
