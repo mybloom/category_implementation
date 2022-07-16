@@ -67,7 +67,7 @@ public class CategoryService {
 	private void validateCategoryDepth(CategorySaveRequest categorySaveRequest) {
 		Category parentCategory = categoryRepository.findByIdOrderByIdDesc(
 				categorySaveRequest.getParentCategoryId())
-			.orElseThrow();
+			.orElseThrow(CategoryNoDataFoundException::new);
 		if (parentCategory.getParent() != null) {
 			throw new CategoryDepthInvalidException();
 		}
