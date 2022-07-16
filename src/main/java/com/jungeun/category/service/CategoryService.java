@@ -1,6 +1,9 @@
 package com.jungeun.category.service;
 
+import static java.util.stream.Collectors.groupingBy;
+
 import com.jungeun.category.controller.dto.CategoryIdResponse;
+import com.jungeun.category.controller.dto.CategoryListAllResponse;
 import com.jungeun.category.controller.dto.CategoryListResponse;
 import com.jungeun.category.controller.dto.CategoryModifyRequest;
 import com.jungeun.category.controller.dto.CategorySaveRequest;
@@ -11,6 +14,8 @@ import com.jungeun.category.domain.CategoryRepository;
 import com.jungeun.category.exception.CategoryDepthInvalidException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,8 +95,33 @@ public class CategoryService {
 		return CategoryIdResponse.of(categoryId);
 	}
 
-	public CategoryListResponse retrieveAllHierarchy() {
+	@Transactional(readOnly = true)
+	public List<CategoryListAllResponse> retrieveAllHierarchy() {
+		List<Category> categories = categoryRepository.findAll();
 
-		return null;
+		Map<Long, List<CategoryListAllResponse>> categoryViaGroupingByParent
+			= categories.stream()
+			.map(CategoryListAllResponse::from)
+			.collect(groupingBy(
+				categoryListAllResponse -> Optional.ofNullable(
+						categoryListAllResponse.getParentCategoryId())
+					.orElse(0L)));
+
+		addSubCategories(categoryViaGroupingByParent);
+
+		return categoryViaGroupingByParent.get(Category.PARENT_CATEGORY_ID_OF_ROOT);
 	}
+
+	private void addSubCategories(
+		Map<Long, List<CategoryListAllResponse>> categoryViaGroupingByParent) {
+
+		List<CategoryListAllResponse> categories = categoryViaGroupingByParent.get(
+			Category.PARENT_CATEGORY_ID_OF_ROOT);
+		for (CategoryListAllResponse category : categories) {
+			List<CategoryListAllResponse> subCategories = categoryViaGroupingByParent.get(
+				category.getCategoryId());
+			category.setSubCategories(subCategories);
+		}
+	}
+
 }
