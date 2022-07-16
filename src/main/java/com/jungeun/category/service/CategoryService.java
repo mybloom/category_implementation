@@ -6,11 +6,11 @@ import com.jungeun.category.controller.dto.CategoryIdResponse;
 import com.jungeun.category.controller.dto.CategorySelectResponse;
 import com.jungeun.category.controller.dto.CategoryModifyRequest;
 import com.jungeun.category.controller.dto.CategorySaveRequest;
-import com.jungeun.category.controller.dto.ICategoryJoin;
 import com.jungeun.category.domain.Category;
 import com.jungeun.category.domain.CategoryRepository;
 import com.jungeun.category.exception.CategoryDepthInvalidException;
-import java.util.ArrayList;
+import com.jungeun.category.exception.CategoryNoDataFoundException;
+import com.jungeun.category.exception.SuperCategoryIdInvalidException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,18 +27,24 @@ public class CategoryService {
 
 	@Transactional(readOnly = true)
 	public CategorySelectResponse selectSubByParent(Long categoryId) {
-		List<ICategoryJoin> categories = categoryRepository.findByParentCategoryId(categoryId);
+		Category category = validateSuperCategoryId(categoryId);
 
-		List<CategorySelectResponse> subCategories = new ArrayList<>();
-		for (ICategoryJoin category : categories) {
-			subCategories.add(CategorySelectResponse.from(category));
+		CategorySelectResponse response = CategorySelectResponse.from(category);
+		response.setSubCategories(category.getSubCategories().stream()
+			.map(CategorySelectResponse::from)
+			.collect(Collectors.toList()));
+
+		return response;
+	}
+
+	private Category validateSuperCategoryId(Long categoryId) {
+		Category category = categoryRepository.findById(categoryId)
+			.orElseThrow(CategoryNoDataFoundException::new);
+
+		if(category.getParent() != null){
+			throw new SuperCategoryIdInvalidException();
 		}
-
-		return CategorySelectResponse.of(
-			categories.get(0).getSuperCategoryId(),
-			categories.get(0).getSuperTitle(),
-			categories.get(0).getSuperParentCategoryId(),
-			subCategories);
+		return category;
 	}
 
 	@Transactional
