@@ -25,6 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Category {
 
+	public static final Long PARENT_CATEGORY_ID_OF_ROOT = 0L;
 	public static final int CATEGORY_DEPTH = 2;
 
 	@Id
