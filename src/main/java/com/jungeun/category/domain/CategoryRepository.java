@@ -2,6 +2,8 @@ package com.jungeun.category.domain;
 
 import com.jungeun.category.controller.dto.ICategoryJoin;
 import java.util.List;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,4 +24,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 			+ "where s.parent.id = :parentCategoryId ")
 	List<ICategoryJoin> findByParentCategoryId(@Param("parentCategoryId") Long parentCategoryId);
 
+	@EntityGraph(attributePaths = {"subCategories"})
+	@Override
+	Optional<Category> findById(Long aLong);
 }
