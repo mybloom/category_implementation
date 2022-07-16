@@ -26,18 +26,14 @@
 
   None
 
+* **Error Response:**
+
+  None
 
 * **Success Response:**
 
-    * **Code:** 200 <br />
-     
-
-* **Error Response:**
-
-    * **Code:** 404 NOT FOUND <br />
-      **Content:** `{ error : "User doesn't exist" }`
-
-* **Response Sample :**
+  * **Code:** 200 <br />
+  * **Response Sample :**
 
   ```json
     [
