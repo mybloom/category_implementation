@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,8 +101,11 @@ public class CategoryService {
 
 	@Transactional
 	public CategoryIdResponse delete(Long categoryId) {
-		categoryRepository.deleteById(categoryId);
-
+		try {
+			categoryRepository.deleteById(categoryId);
+		}catch (EmptyResultDataAccessException e) {
+			throw new CategoryNoDataFoundException();
+		}
 		return CategoryIdResponse.of(categoryId);
 	}
 
