@@ -8,5 +8,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
 	@EntityGraph(attributePaths = {"subCategories"})
 	@Override
-	Optional<Category> findById(Long aLong);
+	Optional<Category> findById(Long categoryId);
+
+	Optional<Category> findByIdOrderByIdDesc(Long categoryId);
 }
