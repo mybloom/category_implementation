@@ -49,6 +49,7 @@ public class CategoryQueryService {
 		subCategories.sort(Comparator.comparing(CategorySelectResponse::getCategoryOrder));
 
 		response.setSubCategories(subCategories);
+
 		return response;
 	}
 
@@ -62,7 +63,7 @@ public class CategoryQueryService {
 			.collect(groupingBy(
 				categoryListAllResponse -> Optional.ofNullable(
 						categoryListAllResponse.getParentCategoryId())
-					.orElse(0L)));
+					.orElse(Category.PARENT_CATEGORY_ID_OF_ROOT)));
 
 		addSubCategories(categoryViaGroupingByParent);
 

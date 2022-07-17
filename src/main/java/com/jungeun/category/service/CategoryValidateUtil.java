@@ -18,26 +18,30 @@ public class CategoryValidateUtil {
 	Category validateCategoryId(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId)
 			.orElseThrow(CategoryNoDataFoundException::new);
+
 		return category;
 	}
 
 	Category validateCategoryIdWithoutSubCategories(Long categoryId) {
 		Category category = categoryRepository.findByIdOrderByIdDesc(categoryId)
 			.orElseThrow(CategoryNoDataFoundException::new);
+
 		return category;
 	}
 
 	Category validateSuperCategoryId(Long categoryId) {
 		Category category = validateCategoryId(categoryId);
 
-		if(category.getParent() != null){
+		if (category.getParent() != null) {
 			throw new SuperCategoryIdInvalidException();
 		}
+
 		return category;
 	}
 
 	void validateCategoryDepth(CategorySaveRequest categorySaveRequest) {
-		Category parentCategory = validateCategoryIdWithoutSubCategories(categorySaveRequest.getParentCategoryId());
+		Category parentCategory = validateCategoryIdWithoutSubCategories(
+			categorySaveRequest.getParentCategoryId());
 
 		if (parentCategory.getParent() != null) {
 			throw new CategoryDepthInvalidException();

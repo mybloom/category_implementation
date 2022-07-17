@@ -18,13 +18,15 @@ public class CategoryCommandService {
 	private final CategoryRepository categoryRepository;
 	private final CategoryValidateUtil categoryValidateUtil;
 
+	private static final int MAX_CATEGORY_ORDER_ADD_NEXT_NUMBER = 1;
+
 	@Transactional
 	public CategoryIdResponse createSuper(CategorySaveRequest categorySaveRequest) {
 		Category maxOrderCategory = categoryRepository.findFirstByParentIsNullOrderByOrderDesc();
 
 		Category category = categoryRepository.save(
 			Category.makeSuper(categorySaveRequest.getTitle(),
-				maxOrderCategory.getOrder() + 1));
+				maxOrderCategory.getOrder() + MAX_CATEGORY_ORDER_ADD_NEXT_NUMBER));
 
 		return CategoryIdResponse.of(category.getId());
 	}
@@ -39,7 +41,7 @@ public class CategoryCommandService {
 			Category.of(categorySaveRequest.getParentCategoryId()));
 
 		if (maxOrderCategory != null) {
-			categoryOrder = maxOrderCategory.getOrder() + 1;
+			categoryOrder = maxOrderCategory.getOrder() + MAX_CATEGORY_ORDER_ADD_NEXT_NUMBER;
 		}
 
 		Category category = Category.makeSub(categorySaveRequest.getTitle(),
@@ -69,7 +71,7 @@ public class CategoryCommandService {
 		} catch (EmptyResultDataAccessException e) {
 			throw new CategoryNoDataFoundException();
 		}
+
 		return CategoryIdResponse.of(categoryId);
 	}
-
 }

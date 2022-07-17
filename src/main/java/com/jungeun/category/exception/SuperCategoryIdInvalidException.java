@@ -1,7 +1,5 @@
 package com.jungeun.category.exception;
 
-import com.jungeun.category.domain.Category;
-
 public class SuperCategoryIdInvalidException extends InvalidException {
 
 	@Override

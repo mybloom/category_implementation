@@ -1,8 +1,10 @@
-package com.jungeun.category.domain;
+package com.jungeun.category.unittest;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.jungeun.category.domain.Category;
+import com.jungeun.category.domain.CategoryRepository;
 import com.jungeun.category.exception.CategoryNoDataFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

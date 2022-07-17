@@ -1,6 +1,6 @@
 package com.jungeun.category.exception;
 
-public class CategoryNoDataFoundException extends NoDataFoundException{
+public class CategoryNoDataFoundException extends NoDataFoundException {
 
 	@Override
 	protected String getBodyMessage() {

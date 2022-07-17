@@ -1,7 +1,6 @@
 package com.jungeun.category.domain;
 
 import com.jungeun.category.controller.dto.CategoryModifySubCategoriesRequest;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -69,14 +68,6 @@ public class Category {
 		}
 
 		this.subCategories = modifySubCategories;
-	}
-
-	public static Category from(
-		CategoryModifySubCategoriesRequest categoryModifySubCategoriesRequest) {
-		return Category.builder()
-			.title(categoryModifySubCategoriesRequest.getTitle())
-			.order(categoryModifySubCategoriesRequest.getCategoryOrder())
-			.build();
 	}
 
 	public static Category of(Long categoryId) {
