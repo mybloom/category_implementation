@@ -28,6 +28,7 @@ public class CategoryRepositoryForCommandTest {
 		//then
 		assertAll(
 			() -> assertThat(savedCategory.getId()).isNotNull(),
+			() -> assertThat(savedCategory.getOrder()).isEqualTo(3),
 			() -> assertThat(savedCategory.getTitle()).isEqualTo(category.getTitle())
 		);
 	}
