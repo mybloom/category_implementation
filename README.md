@@ -56,8 +56,8 @@ javac -version
 - [하위 카테고리 조회](docs/apiSelectByParentId.md)
 - [카테고리 상세 조회](docs/apiSelectDetail.md)
 
-### 카테고리 생성
-- [카테고리 생성](docs/apiCreate.md)
+### 카테고리 등록
+- [카테고리 등록](docs/apiCreate.md)
 
 ### 카테고리 수정
 - [카테고리 수정](docs/apiModify.md)

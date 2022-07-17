@@ -2,9 +2,6 @@
 
 카테고리 수정 API
 
-[🏠API목록으로 돌아가기](api.md)
-
-
 ---
 
 * **URL**
@@ -25,7 +22,26 @@
   ```json  
   {
     "title": "아우터 수정2"   
-  }  
+  } 
+  
+  or
+  
+  {
+    "categoryId": 16,
+    "title": "상위카테고리 이름 수정2",  
+    "subCategories": [
+            {
+                "categoryId": 17,
+                "title": "하위카고리 수정1",
+                "categoryOrder": 1             
+            },
+            {
+                "categoryId": 18,
+                "title": "하위카고리 수정2",
+                "categoryOrder": 2
+            }
+        ]
+    } 
   ```  
 * **Error Response:**
     * **Code:** 404 NOT FOUND <br />
