@@ -12,6 +12,7 @@ spring:
       hibernate:
         format_sql: true
     defer-datasource-initialization: true
+    open-in-view: false
 
   sql:
     init:
