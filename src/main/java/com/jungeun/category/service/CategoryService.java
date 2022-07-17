@@ -39,12 +39,17 @@ public class CategoryService {
 	}
 
 	private Category validateSuperCategoryId(Long categoryId) {
-		Category category = categoryRepository.findById(categoryId)
-			.orElseThrow(CategoryNoDataFoundException::new);
+		Category category = validateCategoryId(categoryId);
 
 		if(category.getParent() != null){
 			throw new SuperCategoryIdInvalidException();
 		}
+		return category;
+	}
+
+	private Category validateCategoryId(Long categoryId) {
+		Category category = categoryRepository.findById(categoryId)
+			.orElseThrow(CategoryNoDataFoundException::new);
 		return category;
 	}
 
@@ -66,18 +71,22 @@ public class CategoryService {
 	}
 
 	private void validateCategoryDepth(CategorySaveRequest categorySaveRequest) {
-		Category parentCategory = categoryRepository.findByIdOrderByIdDesc(
-				categorySaveRequest.getParentCategoryId())
-			.orElseThrow(CategoryNoDataFoundException::new);
+		Category parentCategory = validateCategoryIdWithoutSubCategories(categorySaveRequest.getParentCategoryId());
+
 		if (parentCategory.getParent() != null) {
 			throw new CategoryDepthInvalidException();
 		}
 	}
 
+	private Category validateCategoryIdWithoutSubCategories(Long categoryId) {
+		Category category = categoryRepository.findByIdOrderByIdDesc(categoryId)
+			.orElseThrow(CategoryNoDataFoundException::new);
+		return category;
+	}
+
 	@Transactional(readOnly = true)
 	public CategorySelectResponse retrieveDetail(Long categoryId) {
-		Category category = categoryRepository.findById(categoryId)
-			.orElseThrow();
+		Category category = validateCategoryId(categoryId);
 
 		CategorySelectResponse response = CategorySelectResponse.from(category);
 		response.setSubCategories(category.getSubCategories().stream()
@@ -91,8 +100,7 @@ public class CategoryService {
 	public CategoryIdResponse modify(Long categoryId,
 		CategoryModifyRequest categoryModifyRequest) {
 
-		Category category = categoryRepository.findByIdOrderByIdDesc(categoryId)
-			.orElseThrow(CategoryNoDataFoundException::new);
+		Category category = validateCategoryIdWithoutSubCategories(categoryId);
 
 		category.modify(categoryModifyRequest.getTitle());
 
