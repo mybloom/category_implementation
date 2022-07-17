@@ -56,6 +56,7 @@ public class CategoryController {
 	@GetMapping("/category/{categoryId}/detail")
 	public ResponseEntity<CategorySelectResponse> retrieveDetail(@PathVariable Long categoryId) {
 		CategorySelectResponse response = categoryQueryService.retrieveDetail(categoryId);
+
 		return ResponseEntity.ok().body(response);
 	}
 
@@ -64,7 +65,9 @@ public class CategoryController {
 		@PathVariable Long categoryId,
 		@RequestBody CategoryModifyRequest categoryModifyRequest) {
 
-		CategoryIdResponse response = categoryCommandService.modify(categoryId, categoryModifyRequest);
+		CategoryIdResponse response = categoryCommandService.modify(categoryId,
+			categoryModifyRequest);
+
 		return ResponseEntity.ok().body(response);
 	}
 
