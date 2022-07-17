@@ -46,6 +46,7 @@ public class Category {
 	@JoinColumn(name = "parent_category_id")
 	private Category parent;
 
+	@Builder.Default
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
 	private Set<Category> subCategories = new HashSet<>();
 
