@@ -55,9 +55,10 @@ public class Category {
 			.build();
 	}
 
-	public static Category makeSuper(String title) {
+	public static Category makeSuper(String title, int categoryOrder) {
 		return Category.builder()
 			.title(title)
+			.order(categoryOrder)
 			.build();
 	}
 
