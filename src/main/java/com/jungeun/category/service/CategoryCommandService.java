@@ -55,6 +55,9 @@ public class CategoryCommandService {
 		Category category = categoryValidateUtil.validateCategoryIdWithoutSubCategories(categoryId);
 
 		category.modify(categoryModifyRequest.getTitle());
+		if (categoryModifyRequest.getSubCategories() != null) {
+			category.modifySubCategories(categoryModifyRequest.getSubCategories());
+		}
 
 		return CategoryIdResponse.of(categoryId);
 	}
