@@ -77,7 +77,10 @@ public class CategoryQueryService {
 		for (CategorySelectResponse category : categories) {
 			List<CategorySelectResponse> subCategories = categoryViaGroupingByParent.get(
 				category.getCategoryId());
-			subCategories.sort(Comparator.comparing(CategorySelectResponse::getCategoryOrder));
+
+			if (subCategories != null) {
+				subCategories.sort(Comparator.comparing(CategorySelectResponse::getCategoryOrder));
+			}
 
 			category.setSubCategories(subCategories);
 		}
