@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.groupingBy;
 import com.jungeun.category.controller.dto.CategorySelectResponse;
 import com.jungeun.category.domain.Category;
 import com.jungeun.category.domain.CategoryRepository;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,7 +22,7 @@ public class CategoryQueryService {
 	private final CategoryValidateUtil categoryValidateUtil;
 
 	@Transactional(readOnly = true)
-	public CategorySelectResponse selectSubByParent(Long categoryId) {
+	public CategorySelectResponse retrieveSubByParent(Long categoryId) {
 		Category category = categoryValidateUtil.validateSuperCategoryId(categoryId);
 
 		CategorySelectResponse response = CategorySelectResponse.from(category);
@@ -66,9 +67,13 @@ public class CategoryQueryService {
 
 		List<CategorySelectResponse> categories = categoryViaGroupingByParent.get(
 			Category.PARENT_CATEGORY_ID_OF_ROOT);
+		categories.sort(Comparator.comparing(CategorySelectResponse::getCategoryOrder));
+
 		for (CategorySelectResponse category : categories) {
 			List<CategorySelectResponse> subCategories = categoryViaGroupingByParent.get(
 				category.getCategoryId());
+			subCategories.sort(Comparator.comparing(CategorySelectResponse::getCategoryOrder));
+
 			category.setSubCategories(subCategories);
 		}
 	}
