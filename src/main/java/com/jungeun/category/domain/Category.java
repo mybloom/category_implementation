@@ -35,6 +35,9 @@ public class Category {
 
 	private String title;
 
+	@Column(name = "category_order")
+	private int order;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_category_id")
 	private Category parent;
