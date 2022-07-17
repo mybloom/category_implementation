@@ -34,8 +34,13 @@ public class CategoryCommandService {
 
 		categoryValidateUtil.validateCategoryDepth(categorySaveRequest);
 
+		Category maxOrderCategory = categoryRepository.findFirstByParentOrderByOrderDesc(
+			Category.of(categorySaveRequest.getParentCategoryId()));
+
 		Category category = categoryRepository.save(Category.makeSub(categorySaveRequest.getTitle(),
-			categorySaveRequest.getParentCategoryId()));
+			categorySaveRequest.getParentCategoryId(),
+			maxOrderCategory.getOrder() + 1));
+
 		return CategoryIdResponse.of(category.getId());
 	}
 

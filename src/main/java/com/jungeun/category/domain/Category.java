@@ -62,9 +62,10 @@ public class Category {
 			.build();
 	}
 
-	public static Category makeSub(String title, Long parentCategoryId) {
+	public static Category makeSub(String title, Long parentCategoryId, int categoryOrder) {
 		return Category.builder()
 			.title(title)
+			.order(categoryOrder)
 			.parent(Category.of(parentCategoryId))
 			.build();
 	}

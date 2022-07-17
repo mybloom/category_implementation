@@ -30,7 +30,8 @@ public class CategoryQueryService {
 		List<CategorySelectResponse> categorySelectResponses = category.getSubCategories().stream()
 			.map(CategorySelectResponse::from)
 			.collect(Collectors.toList());
-		categorySelectResponses.sort(Comparator.comparing(CategorySelectResponse::getCategoryOrder));
+		categorySelectResponses.sort(
+			Comparator.comparing(CategorySelectResponse::getCategoryOrder));
 
 		response.setSubCategories(categorySelectResponses);
 
