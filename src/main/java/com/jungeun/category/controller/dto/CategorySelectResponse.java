@@ -15,6 +15,7 @@ public class CategorySelectResponse {
 
 	private final Long categoryId;
 	private final String title;
+	private final int categoryOrder;
 	private final Long parentCategoryId;
 	private List<CategorySelectResponse> subCategories;
 
@@ -27,6 +28,7 @@ public class CategorySelectResponse {
 		return CategorySelectResponse.builder()
 			.categoryId(category.getId())
 			.title(category.getTitle())
+			.categoryOrder(category.getOrder())
 			.parentCategoryId(Optional.ofNullable(category.getParent())
 				.orElse(Category.of(null))
 				.getId())
