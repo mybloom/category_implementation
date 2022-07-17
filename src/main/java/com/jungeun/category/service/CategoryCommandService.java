@@ -34,14 +34,18 @@ public class CategoryCommandService {
 
 		categoryValidateUtil.validateCategoryDepth(categorySaveRequest);
 
+		int categoryOrder = 1;
 		Category maxOrderCategory = categoryRepository.findFirstByParentOrderByOrderDesc(
 			Category.of(categorySaveRequest.getParentCategoryId()));
 
-		Category category = categoryRepository.save(Category.makeSub(categorySaveRequest.getTitle(),
-			categorySaveRequest.getParentCategoryId(),
-			maxOrderCategory.getOrder() + 1));
+		if (maxOrderCategory != null) {
+			categoryOrder = maxOrderCategory.getOrder() + 1;
+		}
 
-		return CategoryIdResponse.of(category.getId());
+		Category category = Category.makeSub(categorySaveRequest.getTitle(),
+			categorySaveRequest.getParentCategoryId(), categoryOrder);
+
+		return CategoryIdResponse.of(categoryRepository.save(category).getId());
 	}
 
 	@Transactional
