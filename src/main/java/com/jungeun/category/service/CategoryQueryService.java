@@ -22,13 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class CategoryService {
+public class CategoryQueryService {
 
 	private final CategoryRepository categoryRepository;
+	private final CategoryValidateUtil categoryValidateUtil;
 
 	@Transactional(readOnly = true)
 	public CategorySelectResponse selectSubByParent(Long categoryId) {
-		Category category = validateSuperCategoryId(categoryId);
+		Category category = categoryValidateUtil.validateSuperCategoryId(categoryId);
 
 		CategorySelectResponse response = CategorySelectResponse.from(category);
 		response.setSubCategories(category.getSubCategories().stream()
@@ -36,57 +37,11 @@ public class CategoryService {
 			.collect(Collectors.toList()));
 
 		return response;
-	}
-
-	private Category validateSuperCategoryId(Long categoryId) {
-		Category category = validateCategoryId(categoryId);
-
-		if(category.getParent() != null){
-			throw new SuperCategoryIdInvalidException();
-		}
-		return category;
-	}
-
-	private Category validateCategoryId(Long categoryId) {
-		Category category = categoryRepository.findById(categoryId)
-			.orElseThrow(CategoryNoDataFoundException::new);
-		return category;
-	}
-
-	@Transactional
-	public CategoryIdResponse createSuper(CategorySaveRequest categorySaveRequest) {
-		Category category = categoryRepository.save(
-			Category.makeSuper(categorySaveRequest.getTitle()));
-		return CategoryIdResponse.of(category.getId());
-	}
-
-	@Transactional
-	public CategoryIdResponse createSub(CategorySaveRequest categorySaveRequest) {
-
-		validateCategoryDepth(categorySaveRequest);
-
-		Category category = categoryRepository.save(Category.makeSub(categorySaveRequest.getTitle(),
-			categorySaveRequest.getParentCategoryId()));
-		return CategoryIdResponse.of(category.getId());
-	}
-
-	private void validateCategoryDepth(CategorySaveRequest categorySaveRequest) {
-		Category parentCategory = validateCategoryIdWithoutSubCategories(categorySaveRequest.getParentCategoryId());
-
-		if (parentCategory.getParent() != null) {
-			throw new CategoryDepthInvalidException();
-		}
-	}
-
-	private Category validateCategoryIdWithoutSubCategories(Long categoryId) {
-		Category category = categoryRepository.findByIdOrderByIdDesc(categoryId)
-			.orElseThrow(CategoryNoDataFoundException::new);
-		return category;
 	}
 
 	@Transactional(readOnly = true)
 	public CategorySelectResponse retrieveDetail(Long categoryId) {
-		Category category = validateCategoryId(categoryId);
+		Category category = categoryValidateUtil.validateCategoryId(categoryId);
 
 		CategorySelectResponse response = CategorySelectResponse.from(category);
 		response.setSubCategories(category.getSubCategories().stream()
@@ -94,27 +49,6 @@ public class CategoryService {
 			.collect(Collectors.toList()));
 
 		return response;
-	}
-
-	@Transactional
-	public CategoryIdResponse modify(Long categoryId,
-		CategoryModifyRequest categoryModifyRequest) {
-
-		Category category = validateCategoryIdWithoutSubCategories(categoryId);
-
-		category.modify(categoryModifyRequest.getTitle());
-
-		return CategoryIdResponse.of(categoryId);
-	}
-
-	@Transactional
-	public CategoryIdResponse delete(Long categoryId) {
-		try {
-			categoryRepository.deleteById(categoryId);
-		}catch (EmptyResultDataAccessException e) {
-			throw new CategoryNoDataFoundException();
-		}
-		return CategoryIdResponse.of(categoryId);
 	}
 
 	@Transactional(readOnly = true)

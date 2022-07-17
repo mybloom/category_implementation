@@ -4,7 +4,8 @@ import com.jungeun.category.controller.dto.CategoryIdResponse;
 import com.jungeun.category.controller.dto.CategorySelectResponse;
 import com.jungeun.category.controller.dto.CategoryModifyRequest;
 import com.jungeun.category.controller.dto.CategorySaveRequest;
-import com.jungeun.category.service.CategoryService;
+import com.jungeun.category.service.CategoryCommandService;
+import com.jungeun.category.service.CategoryQueryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CategoryController {
 
-	private final CategoryService categoryService;
+	private final CategoryQueryService categoryQueryService;
+	private final CategoryCommandService categoryCommandService;
 
 	@GetMapping("/category")
 	public ResponseEntity<List<CategorySelectResponse>> retrieveAllHierarchy() {
-		List<CategorySelectResponse> response = categoryService.retrieveAllHierarchy();
+		List<CategorySelectResponse> response = categoryQueryService.retrieveAllHierarchy();
 
 		return ResponseEntity.ok().body(response);
 	}
@@ -32,7 +34,7 @@ public class CategoryController {
 	@GetMapping("/category/{categoryId}")
 	public ResponseEntity<CategorySelectResponse> retrieveSubByParent(
 		@PathVariable final Long categoryId) {
-		CategorySelectResponse response = categoryService.selectSubByParent(categoryId);
+		CategorySelectResponse response = categoryQueryService.selectSubByParent(categoryId);
 
 		return ResponseEntity.ok().body(response);
 	}
@@ -43,9 +45,9 @@ public class CategoryController {
 
 		CategoryIdResponse response = null;
 		if (categorySaveRequest.getParentCategoryId() == null) {
-			response = categoryService.createSuper(categorySaveRequest);
+			response = categoryCommandService.createSuper(categorySaveRequest);
 		} else {
-			response = categoryService.createSub(categorySaveRequest);
+			response = categoryCommandService.createSub(categorySaveRequest);
 		}
 
 		return ResponseEntity.ok().body(response);
@@ -53,7 +55,7 @@ public class CategoryController {
 
 	@GetMapping("/category/{categoryId}/detail")
 	public ResponseEntity<CategorySelectResponse> retrieveDetail(@PathVariable Long categoryId) {
-		CategorySelectResponse response = categoryService.retrieveDetail(categoryId);
+		CategorySelectResponse response = categoryQueryService.retrieveDetail(categoryId);
 		return ResponseEntity.ok().body(response);
 	}
 
@@ -62,13 +64,13 @@ public class CategoryController {
 		@PathVariable Long categoryId,
 		@RequestBody CategoryModifyRequest categoryModifyRequest) {
 
-		CategoryIdResponse response = categoryService.modify(categoryId, categoryModifyRequest);
+		CategoryIdResponse response = categoryCommandService.modify(categoryId, categoryModifyRequest);
 		return ResponseEntity.ok().body(response);
 	}
 
 	@DeleteMapping("/category/{categoryId}")
 	public ResponseEntity<CategoryIdResponse> delete(@PathVariable Long categoryId) {
-		CategoryIdResponse response = categoryService.delete(categoryId);
+		CategoryIdResponse response = categoryCommandService.delete(categoryId);
 
 		return ResponseEntity.ok().body(response);
 	}
