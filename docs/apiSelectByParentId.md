@@ -36,28 +36,29 @@
     * **Code:** 200 <br />
     * **Response Sample :**
 
-      ```json
-        {
-            "categoryId": 1,
-            "title": "아우터",
-            "parentCategoryId": null,
-            "subCategories": [
-                {
-                    "categoryId": 4,
-                    "title": "쟈켓",
-                    "parentCategoryId": 1
-                },
-                {
-                    "categoryId": 5,
-                    "title": "가디건",
-                    "parentCategoryId": 1
-                    },
-                {
-                    "categoryId": 6,
-                    "title": "블루종",
-                    "parentCategoryId": 1
-                }
-            ]
-        }
+    ```json
+    {
+        "categoryId": 2,
+        "title": "상의",
+        "categoryOrder": 3,
+        "parentCategoryId": null,
+        "subCategories": [
+            {
+                "categoryId": 8,
+                "title": "반팔",
+                "categoryOrder": 1,
+                "parentCategoryId": 2,
+                "subCategories": null
+            },
+            {
+                "categoryId": 7,
+                "title": "긴팔",
+                "categoryOrder": 2,
+                "parentCategoryId": 2,
+                "subCategories": null
+            }
+        ]
+    }    
+    ```  
 
-      ```
+
