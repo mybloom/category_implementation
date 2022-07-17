@@ -19,5 +19,5 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
-  org.springframework.transaction.interceptor: trace
-  org.hibernate.type: trace
+#  org.springframework.transaction.interceptor: trace
+#  org.hibernate.type: trace
