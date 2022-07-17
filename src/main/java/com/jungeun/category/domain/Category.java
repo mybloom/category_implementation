@@ -1,7 +1,9 @@
 package com.jungeun.category.domain;
 
+import com.jungeun.category.controller.dto.CategoryModifySubCategoriesRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,6 +49,23 @@ public class Category {
 
 	public void modify(String title) {
 		this.title = title;
+	}
+
+	public void modifySubCategories(List<CategoryModifySubCategoriesRequest> subCategoriesRequest) {
+		List<Category> subCategories = subCategoriesRequest.stream()
+			.map(Category::from)
+			.collect(Collectors.toList());
+
+		this.subCategories = subCategories;
+	}
+
+	public static Category from(
+		CategoryModifySubCategoriesRequest categoryModifySubCategoriesRequest) {
+		return Category.builder()
+			.id(categoryModifySubCategoriesRequest.getCategoryId())
+			.title(categoryModifySubCategoriesRequest.getTitle())
+			.order(categoryModifySubCategoriesRequest.getCategoryOrder())
+			.build();
 	}
 
 	public static Category of(Long categoryId) {
