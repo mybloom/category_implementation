@@ -2,7 +2,9 @@ package com.jungeun.category.domain;
 
 import com.jungeun.category.controller.dto.CategoryModifySubCategoriesRequest;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -45,24 +47,32 @@ public class Category {
 	private Category parent;
 
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
-	private List<Category> subCategories = new ArrayList<>();
+	private Set<Category> subCategories = new HashSet<>();
 
 	public void modify(String title) {
 		this.title = title;
 	}
 
 	public void modifySubCategories(List<CategoryModifySubCategoriesRequest> subCategoriesRequest) {
-		List<Category> subCategories = subCategoriesRequest.stream()
-			.map(Category::from)
-			.collect(Collectors.toList());
+		Set<Category> modifySubCategories = null;
+		for (Category subCategory : subCategories) {
+			modifySubCategories = subCategoriesRequest.stream()
+				.filter(categoryModifyRequest -> categoryModifyRequest.getCategoryId()
+					.equals(subCategory.id))
+				.map(categoryModifySubCategoriesRequest -> {
+					subCategory.title = categoryModifySubCategoriesRequest.getTitle();
+					subCategory.order = categoryModifySubCategoriesRequest.getCategoryOrder();
+					return subCategory;
+				})
+				.collect(Collectors.toSet());
+		}
 
-		this.subCategories = subCategories;
+		this.subCategories = modifySubCategories;
 	}
 
 	public static Category from(
 		CategoryModifySubCategoriesRequest categoryModifySubCategoriesRequest) {
 		return Category.builder()
-			.id(categoryModifySubCategoriesRequest.getCategoryId())
 			.title(categoryModifySubCategoriesRequest.getTitle())
 			.order(categoryModifySubCategoriesRequest.getCategoryOrder())
 			.build();
