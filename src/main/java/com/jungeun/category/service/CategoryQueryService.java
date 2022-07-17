@@ -2,21 +2,14 @@ package com.jungeun.category.service;
 
 import static java.util.stream.Collectors.groupingBy;
 
-import com.jungeun.category.controller.dto.CategoryIdResponse;
 import com.jungeun.category.controller.dto.CategorySelectResponse;
-import com.jungeun.category.controller.dto.CategoryModifyRequest;
-import com.jungeun.category.controller.dto.CategorySaveRequest;
 import com.jungeun.category.domain.Category;
 import com.jungeun.category.domain.CategoryRepository;
-import com.jungeun.category.exception.CategoryDepthInvalidException;
-import com.jungeun.category.exception.CategoryNoDataFoundException;
-import com.jungeun.category.exception.SuperCategoryIdInvalidException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
