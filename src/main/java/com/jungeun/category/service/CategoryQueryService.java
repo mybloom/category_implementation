@@ -43,10 +43,12 @@ public class CategoryQueryService {
 		Category category = categoryValidateUtil.validateCategoryId(categoryId);
 
 		CategorySelectResponse response = CategorySelectResponse.from(category);
-		response.setSubCategories(category.getSubCategories().stream()
+		List<CategorySelectResponse> subCategories = category.getSubCategories().stream()
 			.map(CategorySelectResponse::from)
-			.collect(Collectors.toList()));
+			.collect(Collectors.toList());
+		subCategories.sort(Comparator.comparing(CategorySelectResponse::getCategoryOrder));
 
+		response.setSubCategories(subCategories);
 		return response;
 	}
 
