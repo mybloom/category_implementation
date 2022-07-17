@@ -20,8 +20,12 @@ public class CategoryCommandService {
 
 	@Transactional
 	public CategoryIdResponse createSuper(CategorySaveRequest categorySaveRequest) {
+		Category maxOrderCategory = categoryRepository.findFirstByParentIsNullOrderByOrderDesc();
+
 		Category category = categoryRepository.save(
-			Category.makeSuper(categorySaveRequest.getTitle()));
+			Category.makeSuper(categorySaveRequest.getTitle(),
+				maxOrderCategory.getOrder() + 1));
+
 		return CategoryIdResponse.of(category.getId());
 	}
 
@@ -50,7 +54,7 @@ public class CategoryCommandService {
 	public CategoryIdResponse delete(Long categoryId) {
 		try {
 			categoryRepository.deleteById(categoryId);
-		}catch (EmptyResultDataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			throw new CategoryNoDataFoundException();
 		}
 		return CategoryIdResponse.of(categoryId);
