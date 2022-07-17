@@ -23,14 +23,14 @@
   {
     "title": "상위카고리 등록",   
      "parentCategoryId": ""   
-  }_
+  }
   
   OR
   
   {
     "title": "하위카고리 등록",   
     "parentCategoryId": "1"   
-  }_
+  }
   ```  
 
 * **Error Response:**
