@@ -26,9 +26,13 @@ public class CategoryQueryService {
 		Category category = categoryValidateUtil.validateSuperCategoryId(categoryId);
 
 		CategorySelectResponse response = CategorySelectResponse.from(category);
-		response.setSubCategories(category.getSubCategories().stream()
+
+		List<CategorySelectResponse> categorySelectResponses = category.getSubCategories().stream()
 			.map(CategorySelectResponse::from)
-			.collect(Collectors.toList()));
+			.collect(Collectors.toList());
+		categorySelectResponses.sort(Comparator.comparing(CategorySelectResponse::getCategoryOrder));
+
+		response.setSubCategories(categorySelectResponses);
 
 		return response;
 	}
