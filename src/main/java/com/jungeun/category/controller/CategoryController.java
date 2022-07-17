@@ -34,7 +34,7 @@ public class CategoryController {
 	@GetMapping("/category/{categoryId}")
 	public ResponseEntity<CategorySelectResponse> retrieveSubByParent(
 		@PathVariable final Long categoryId) {
-		CategorySelectResponse response = categoryQueryService.selectSubByParent(categoryId);
+		CategorySelectResponse response = categoryQueryService.retrieveSubByParent(categoryId);
 
 		return ResponseEntity.ok().body(response);
 	}
