@@ -24,7 +24,7 @@ tar -zxvf openjdk-11.0.2_linux-x64_bin.tar.gz
 
 - 환경변수 등록
 vi /etc/profile
-export JAVA_HOME=/usr/lib/jdk-11.0.2/bin
+export JAVA_HOME=/usr/lib/jdk-11.0.2
 
 - 적용 및 확인
 source /etc/profile
