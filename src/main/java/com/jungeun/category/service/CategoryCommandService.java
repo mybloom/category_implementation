@@ -66,12 +66,12 @@ public class CategoryCommandService {
 
 	@Transactional
 	public CategoryIdResponse delete(Long categoryId) {
-		try {
-			categoryRepository.deleteById(categoryId);
-		} catch (EmptyResultDataAccessException e) {
-			throw new CategoryNoDataFoundException();
-		}
+
+		Category category = categoryRepository.findById(categoryId)
+				.orElseThrow(CategoryNoDataFoundException::new);
+		categoryRepository.delete(category);
 
 		return CategoryIdResponse.of(categoryId);
 	}
+
 }
