@@ -57,3 +57,11 @@ jobs:
 
     - name: Upload to S3
       run: aws s3 cp --region ap-northeast-2 --acl private ./category-implementation.zip s3://category-github-action/
+      
+    # appspec.yml 파일 복사 : s3에 보내기 위한 것 
+    - name: Copy appspec.yml
+      run: cp appspec.yml ./deploy 
+    
+    # codeDeploy
+    - name: CodeDeploy
+      run: aws deploy create-deployment --application-name category-implementation --deployment-group-name category-githubaction-group --s3-location bucket=category-implementation,key=category-implementation.zip,bundleType=zip 
