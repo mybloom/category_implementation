@@ -65,5 +65,3 @@ jobs:
     # codedeploy	
     - name: CodeDeploy
       run: aws deploy create-deployment --application-name category-implementation --deployment-group-name category-githubaction-group --s3-location bucket=category-github-action,key=category-implementation.zip,bundleType=zip
-    
-  
